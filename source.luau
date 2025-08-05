@@ -5864,7 +5864,7 @@ function Compkiller.new(Config : Window)
 			Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
 			Frame.BorderSizePixel = 0
 			Frame.ClipsDescendants = true
-			Frame.Size = UDim2.new(0, 75, 0, 26)
+			Frame.Size = UDim2.new(0, 75, 0, 32)
 			Frame.ZIndex = 10
 
 			UICorner.CornerRadius = UDim.new(0, 3)
@@ -5904,12 +5904,12 @@ function Compkiller.new(Config : Window)
 			TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
 			TextLabel.BorderSizePixel = 0
 			TextLabel.Position = UDim2.new(0, 10, 0.5, 0)
-			TextLabel.Size = UDim2.new(0, 200, 0, 20)
+			TextLabel.Size = UDim2.new(0, 200, 0, 25)
 			TextLabel.ZIndex = 12
 			TextLabel.Font = Enum.Font.GothamMedium
 			TextLabel.Text = TabConfig.Name
 			TextLabel.TextColor3 = Compkiller.Colors.SwitchColor
-			TextLabel.TextSize = 13.000
+			TextLabel.TextSize = 15.000
 			TextLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 			table.insert(Compkiller.Elements.SwitchColor , {
@@ -5920,7 +5920,7 @@ function Compkiller.new(Config : Window)
 			local UpdateScale = function()
 				local scale = TextService:GetTextSize(TextLabel.Text,TextLabel.TextSize,TextLabel.Font,Vector2.new(math.huge,math.huge));
 
-				Frame.Size = UDim2.new(0, scale.X + 19, 0, 26)
+				Frame.Size = UDim2.new(0, scale.X + 19, 0, 32)
 			end;
 
 			UpdateScale()
