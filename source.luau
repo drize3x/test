@@ -8713,7 +8713,7 @@ function Compkiller:Loader(Text,Duration)
 	local CompKiller = Instance.new("ScreenGui")
 
 	CompKiller.Name = Compkiller:_RandomString()
-	CompKiller.Parent = CoreGui
+	CompKiller.Parent = game:GetService("CoreGui")
 	CompKiller.Enabled = true
 	CompKiller.ResetOnSpawn = false
 	CompKiller.IgnoreGuiInset = true
@@ -8727,7 +8727,7 @@ function Compkiller:Loader(Text,Duration)
 	Loader.Parent = CompKiller
 	Loader.AnchorPoint = Vector2.new(0.5, 0.5)
 	Loader.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-	Loader.BackgroundTransparency = 0.5
+	Loader.BackgroundTransparency = 0.3
 	Loader.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	Loader.BorderSizePixel = 0
 	Loader.Position = UDim2.new(0.5, 0, 0.5, 0)
@@ -8767,7 +8767,11 @@ function Compkiller:Loader(Text,Duration)
 
 	local Event = Instance.new('BindableEvent');
 
+	-- Đảm bảo text hiển thị ngay lập tức
+	print("Loader started - F text should be visible")
+	
 	task.delay(1,function()
+		print("1 second passed - transitioning to FANT4SY")
 		-- Ẩn chữ "F" và hiển thị "FANT4SY" từ dưới lên
 		FText.TextTransparency = 1
 		
@@ -8775,11 +8779,13 @@ function Compkiller:Loader(Text,Duration)
 		FullText.TextTransparency = 0
 
 		task.delay(2,function()
+			print("3 seconds passed - hiding everything")
 			-- Ẩn tất cả
 			FullText.TextTransparency = 1
 			Loader.BackgroundTransparency = 1
 
 			task.delay(0.5,function()
+				print("Loader finished - destroying")
 				CompKiller:Destroy();
 				Event:Fire();
 			end)
