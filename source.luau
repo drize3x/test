@@ -8711,6 +8711,7 @@ end;
 
 function Compkiller:Loader(Text,Duration)
 	local CompKiller = Instance.new("ScreenGui")
+	local TweenService = game:GetService("TweenService")
 
 	CompKiller.Name = Compkiller:_RandomString()
 	CompKiller.Parent = game:GetService("CoreGui")
@@ -8770,26 +8771,30 @@ function Compkiller:Loader(Text,Duration)
 	-- Animation sequence
 	task.delay(1, function()
 		-- Fade out chữ "F"
-		Compkiller:_Animation(FText, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {
+		local tween1 = TweenService:Create(FText, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {
 			TextTransparency = 1
 		});
+		tween1:Play();
 		
 		-- Slide "FANT4SY" từ dưới lên
-		Compkiller:_Animation(FullText, TweenInfo.new(0.8, Enum.EasingStyle.Quint), {
+		local tween2 = TweenService:Create(FullText, TweenInfo.new(0.8, Enum.EasingStyle.Quint), {
 			Position = UDim2.new(0.5, 0, 0.5, 0),
 			TextTransparency = 0
 		});
+		tween2:Play();
 
 		task.delay(Duration or 2, function()
 			-- Fade out "FANT4SY"
-			Compkiller:_Animation(FullText, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {
+			local tween3 = TweenService:Create(FullText, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {
 				TextTransparency = 1
 			});
+			tween3:Play();
 			
 			-- Fade out background
-			Compkiller:_Animation(Loader, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {
+			local tween4 = TweenService:Create(Loader, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {
 				BackgroundTransparency = 1
 			});
+			tween4:Play();
 
 			task.delay(0.5, function()
 				CompKiller:Destroy();
