@@ -8722,13 +8722,12 @@ function Compkiller:Loader(Text,Duration)
 	local Loader = Instance.new("Frame")
 	local FText = Instance.new("TextLabel")
 	local FullText = Instance.new("TextLabel")
-	local Vignette = Instance.new("ImageLabel")
 
 	Loader.Name = Compkiller:_RandomString()
 	Loader.Parent = CompKiller
 	Loader.AnchorPoint = Vector2.new(0.5, 0.5)
 	Loader.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-	Loader.BackgroundTransparency = 1
+	Loader.BackgroundTransparency = 0.5
 	Loader.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	Loader.BorderSizePixel = 0
 	Loader.Position = UDim2.new(0.5, 0, 0.5, 0)
@@ -8746,9 +8745,9 @@ function Compkiller:Loader(Text,Duration)
 	FText.ZIndex = 100
 	FText.Font = Enum.Font.GothamBold
 	FText.Text = "F"
-	FText.TextColor3 = Compkiller.Colors.Highlight
+	FText.TextColor3 = Color3.fromRGB(0, 255, 140)
 	FText.TextSize = 120
-	FText.TextTransparency = 1
+	FText.TextTransparency = 0
 
 	-- Text "FANT4SY" từ dưới lên
 	FullText.Name = Compkiller:_RandomString()
@@ -8762,81 +8761,27 @@ function Compkiller:Loader(Text,Duration)
 	FullText.ZIndex = 100
 	FullText.Font = Enum.Font.GothamBold
 	FullText.Text = Text or "FANT4SY"
-	FullText.TextColor3 = Compkiller.Colors.Highlight
+	FullText.TextColor3 = Color3.fromRGB(0, 255, 140)
 	FullText.TextSize = 60
 	FullText.TextTransparency = 1
 
-	Vignette.Name = Compkiller:_RandomString()
-	Vignette.Parent = Loader
-	Vignette.BackgroundTransparency = 1.000
-	Vignette.BorderColor3 = Color3.fromRGB(27, 42, 53)
-	Vignette.BorderSizePixel = 0
-	Vignette.Size = UDim2.new(1, 0, 1, 0)
-	Vignette.Image = "rbxassetid://18720640102"
-	Vignette.ImageColor3 = Compkiller.Colors.Highlight
-	Vignette.ImageTransparency = 1
-	Vignette.AnchorPoint = Vector2.new(0.5,0.5)
-	Vignette.Position = UDim2.fromScale(0.5,0.5)
-
-	Compkiller:_Animation(Loader,TweenInfo.new(0.55,Enum.EasingStyle.Quint),{
-		BackgroundTransparency = 0.5
-	});
-
 	local Event = Instance.new('BindableEvent');
 
-	task.delay(0.5,function()
-		-- Hiển thị chữ "F" ở giữa
-		Compkiller:_Animation(FText,TweenInfo.new(0.75,Enum.EasingStyle.Quint),{
-			TextTransparency = 0,
-			Size = UDim2.new(0, 200, 0, 200)
-		});
+	task.delay(1,function()
+		-- Ẩn chữ "F" và hiển thị "FANT4SY" từ dưới lên
+		FText.TextTransparency = 1
+		
+		FullText.Position = UDim2.new(0.5, 0, 0.5, 0)
+		FullText.TextTransparency = 0
 
-		task.delay(0.25,function()
-			Compkiller:_Animation(Vignette,TweenInfo.new(5),{
-				ImageTransparency = 0.2
-			});
+		task.delay(2,function()
+			-- Ẩn tất cả
+			FullText.TextTransparency = 1
+			Loader.BackgroundTransparency = 1
 
-			task.wait(Duration or 4.5)
-
-			-- Ẩn chữ "F" và hiển thị "FANT4SY" từ dưới lên
-			Compkiller:_Animation(FText,TweenInfo.new(0.5,Enum.EasingStyle.Quint),{
-				TextTransparency = 1,
-			});
-
-			Compkiller:_Animation(FullText,TweenInfo.new(1,Enum.EasingStyle.Quint),{
-				Position = UDim2.new(0.5, 0, 0.5, 0),
-				TextTransparency = 0
-			});
-
-			task.delay(1,function()
-				-- Ẩn tất cả
-				Compkiller:_Animation(FullText,TweenInfo.new(0.75,Enum.EasingStyle.Quint),{
-					TextTransparency = 1,
-				});
-
-				Compkiller:_Animation(Vignette,TweenInfo.new(3,Enum.EasingStyle.Quint,Enum.EasingDirection.InOut),{
-					Size = UDim2.new(2, 0, 2, 0)
-				});
-
-				Compkiller:_Animation(Loader,TweenInfo.new(1.5,Enum.EasingStyle.Quint,Enum.EasingDirection.InOut),{
-					BackgroundTransparency = 1
-				});
-
-				task.delay(0.1,function()
-					Compkiller:_Animation(Vignette,TweenInfo.new(1,Enum.EasingStyle.Quint,Enum.EasingDirection.InOut),{
-						ImageTransparency = 1
-					});
-
-					task.wait(0.2)
-
-					task.delay(3,function()
-						CompKiller:Destroy();
-					end)
-				end)
-
-				task.delay(0.6,function()
-					Event:Fire();
-				end)
+			task.delay(0.5,function()
+				CompKiller:Destroy();
+				Event:Fire();
 			end)
 		end)
 	end);
