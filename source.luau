@@ -8768,8 +8768,14 @@ function Compkiller:Loader(Text,Duration)
 
 	local Event = Instance.new('BindableEvent');
 
+	-- Debug print
+	print("Loader started - Text:", Text)
+	print("FText visible:", FText.TextTransparency == 0)
+	print("FullText visible:", FullText.TextTransparency == 0)
+
 	-- Animation sequence
 	task.delay(1, function()
+		print("1 second passed - starting animation")
 		-- Fade out chữ "F"
 		local tween1 = TweenService:Create(FText, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {
 			TextTransparency = 1
@@ -8784,6 +8790,7 @@ function Compkiller:Loader(Text,Duration)
 		tween2:Play();
 
 		task.delay(Duration or 2, function()
+			print("Duration passed - ending animation")
 			-- Fade out "FANT4SY"
 			local tween3 = TweenService:Create(FullText, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {
 				TextTransparency = 1
@@ -8797,6 +8804,7 @@ function Compkiller:Loader(Text,Duration)
 			tween4:Play();
 
 			task.delay(0.5, function()
+				print("Loader finished - destroying")
 				CompKiller:Destroy();
 				Event:Fire();
 			end);
