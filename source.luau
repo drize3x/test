@@ -343,7 +343,7 @@ local Compkiller = {
 };
 
 Compkiller.Colors = {
-	Highlight = Color3.fromRGB(31, 124, 255),
+	Highlight = Color3.fromRGB(31, 87, 255),
 	Toggle = Color3.fromRGB(14, 100, 213),
 	Risky = Color3.fromRGB(251, 255, 39),
 	BGDBColor = Color3.fromRGB(22, 24, 29),
@@ -8752,7 +8752,7 @@ function Compkiller:Loader(IconId,Duration)
 	Vignette.BorderSizePixel = 0
 	Vignette.Size = UDim2.new(1, 0, 1, 0)
 	Vignette.Image = "rbxassetid://18720640102"
-	Vignette.ImageColor3 = Color3.fromRGB(31, 176, 255)
+	Vignette.ImageColor3 = Color3.fromRGB(31, 87, 255)
 	Vignette.ImageTransparency = 1
 	Vignette.AnchorPoint = Vector2.new(0.5,0.5)
 	Vignette.Position = UDim2.fromScale(0.5,0.5)
