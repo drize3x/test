@@ -343,8 +343,8 @@ local Compkiller = {
 };
 
 Compkiller.Colors = {
-	Highlight = Color3.fromRGB(17, 238, 253),
-	Toggle = Color3.fromRGB(14, 203, 213),
+	Highlight = Color3.fromRGB(126, 193, 255),
+	Toggle = Color3.fromRGB(126, 193, 255),
 	Risky = Color3.fromRGB(251, 255, 39),
 	BGDBColor = Color3.fromRGB(22, 24, 29),
 	BlockColor = Color3.fromRGB(28, 29, 34),
@@ -4915,8 +4915,8 @@ function Compkiller:SetTheme(name)
 		};
 	elseif name == "Default" then
 		Compkiller.Colors = {
-			Highlight = Color3.fromRGB(17, 238, 253),
-			Toggle = Color3.fromRGB(14, 203, 213),
+			Highlight = Color3.fromRGB(126, 193, 255),
+			Toggle = Color3.fromRGB(126, 193, 255),
 			Risky = Color3.fromRGB(251, 255, 39),
 			BGDBColor = Color3.fromRGB(22, 24, 29),
 			BlockColor = Color3.fromRGB(28, 29, 34),
@@ -8709,106 +8709,101 @@ function Compkiller:ConfigManager(ConfigManager: ConfigManager) : ConfigFunction
 	return Args;
 end;
 
-function Compkiller:Loader(Text,Duration)
+function Compkiller:Loader(IconId,Duration)
 	local CompKiller = Instance.new("ScreenGui")
-	local TweenService = game:GetService("TweenService")
 
 	CompKiller.Name = Compkiller:_RandomString()
-	CompKiller.Parent = game:GetService("CoreGui")
+	CompKiller.Parent = CoreGui
 	CompKiller.Enabled = true
 	CompKiller.ResetOnSpawn = false
 	CompKiller.IgnoreGuiInset = true
 	CompKiller.ZIndexBehavior = Enum.ZIndexBehavior.Global
 
 	local Loader = Instance.new("Frame")
-	local FText = Instance.new("TextLabel")
-	local FullText = Instance.new("TextLabel")
+	local Icon = Instance.new("ImageLabel")
+	local Vignette = Instance.new("ImageLabel")
 
 	Loader.Name = Compkiller:_RandomString()
 	Loader.Parent = CompKiller
 	Loader.AnchorPoint = Vector2.new(0.5, 0.5)
 	Loader.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-	Loader.BackgroundTransparency = 0.3
+	Loader.BackgroundTransparency = 1
 	Loader.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	Loader.BorderSizePixel = 0
 	Loader.Position = UDim2.new(0.5, 0, 0.5, 0)
 	Loader.Size = UDim2.new(1, 0, 1, 0)
 
-	-- Text "F" ở giữa
-	FText.Name = Compkiller:_RandomString()
-	FText.Parent = Loader
-	FText.AnchorPoint = Vector2.new(0.5, 0.5)
-	FText.BackgroundTransparency = 1.000
-	FText.BorderColor3 = Color3.fromRGB(0, 0, 0)
-	FText.BorderSizePixel = 0
-	FText.Position = UDim2.new(0.5, 0, 0.5, 0)
-	FText.Size = UDim2.new(0, 200, 0, 200)
-	FText.ZIndex = 100
-	FText.Font = Enum.Font.GothamBold
-	FText.Text = "F"
-	FText.TextColor3 = Color3.fromRGB(0, 255, 140)
-	FText.TextSize = 120
-	FText.TextTransparency = 0
+	Icon.Name = Compkiller:_RandomString()
+	Icon.Parent = Loader
+	Icon.AnchorPoint = Vector2.new(0.5, 0.5)
+	Icon.BackgroundTransparency = 1.000
+	Icon.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Icon.BorderSizePixel = 0
+	Icon.Position = UDim2.new(0.5, 0, 0.5, 0)
+	Icon.Size = UDim2.new(0, 750, 0, 750)
+	Icon.ZIndex = 100
+	Icon.Image = IconId or "rbxassetid://120245531583106"
+	Icon.ImageTransparency = 1
 
-	-- Text "FANT4SY" từ dưới lên
-	FullText.Name = Compkiller:_RandomString()
-	FullText.Parent = Loader
-	FullText.AnchorPoint = Vector2.new(0.5, 0.5)
-	FullText.BackgroundTransparency = 1.000
-	FullText.BorderColor3 = Color3.fromRGB(0, 0, 0)
-	FullText.BorderSizePixel = 0
-	FullText.Position = UDim2.new(0.5, 0, 1.5, 0) -- Bắt đầu từ dưới màn hình
-	FullText.Size = UDim2.new(0, 400, 0, 100)
-	FullText.ZIndex = 100
-	FullText.Font = Enum.Font.GothamBold
-	FullText.Text = Text or "FANT4SY"
-	FullText.TextColor3 = Color3.fromRGB(0, 255, 140)
-	FullText.TextSize = 60
-	FullText.TextTransparency = 1
+	Vignette.Name = Compkiller:_RandomString()
+	Vignette.Parent = Loader
+	Vignette.BackgroundTransparency = 1.000
+	Vignette.BorderColor3 = Color3.fromRGB(27, 42, 53)
+	Vignette.BorderSizePixel = 0
+	Vignette.Size = UDim2.new(1, 0, 1, 0)
+	Vignette.Image = "rbxassetid://18720640102"
+	Vignette.ImageColor3 = Color3.fromRGB(126, 193, 255)
+	Vignette.ImageTransparency = 1
+	Vignette.AnchorPoint = Vector2.new(0.5,0.5)
+	Vignette.Position = UDim2.fromScale(0.5,0.5)
+
+	Compkiller:_Animation(Loader,TweenInfo.new(0.55,Enum.EasingStyle.Quint),{
+		BackgroundTransparency = 0.5
+	});
 
 	local Event = Instance.new('BindableEvent');
 
-	-- Debug print
-	print("Loader started - Text:", Text)
-	print("FText visible:", FText.TextTransparency == 0)
-	print("FullText visible:", FullText.TextTransparency == 0)
-
-	-- Animation sequence
-	task.delay(1, function()
-		print("1 second passed - starting animation")
-		-- Fade out chữ "F"
-		local tween1 = TweenService:Create(FText, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {
-			TextTransparency = 1
+	task.delay(0.5,function()
+		Compkiller:_Animation(Icon,TweenInfo.new(0.75,Enum.EasingStyle.Quint),{
+			ImageTransparency = 0.01,
+			Size = UDim2.new(0, 200, 0, 200)
 		});
-		tween1:Play();
-		
-		-- Slide "FANT4SY" từ dưới lên
-		local tween2 = TweenService:Create(FullText, TweenInfo.new(0.8, Enum.EasingStyle.Quint), {
-			Position = UDim2.new(0.5, 0, 0.5, 0),
-			TextTransparency = 0
-		});
-		tween2:Play();
 
-		task.delay(Duration or 2, function()
-			print("Duration passed - ending animation")
-			-- Fade out "FANT4SY"
-			local tween3 = TweenService:Create(FullText, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {
-				TextTransparency = 1
+		task.delay(0.25,function()
+			Compkiller:_Animation(Vignette,TweenInfo.new(5),{
+				ImageTransparency = 0.2
 			});
-			tween3:Play();
-			
-			-- Fade out background
-			local tween4 = TweenService:Create(Loader, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {
+
+			task.wait(Duration or 4.5)
+
+			Compkiller:_Animation(Vignette,TweenInfo.new(3,Enum.EasingStyle.Quint,Enum.EasingDirection.InOut),{
+				Size = UDim2.new(2, 0, 2, 0)
+			});
+
+			Compkiller:_Animation(Icon,TweenInfo.new(0.75,Enum.EasingStyle.Quint,Enum.EasingDirection.InOut),{
+				ImageTransparency = 1,
+			});
+
+			Compkiller:_Animation(Loader,TweenInfo.new(1.5,Enum.EasingStyle.Quint,Enum.EasingDirection.InOut),{
 				BackgroundTransparency = 1
 			});
-			tween4:Play();
 
-			task.delay(0.5, function()
-				print("Loader finished - destroying")
-				CompKiller:Destroy();
+			task.delay(0.1,function()
+				Compkiller:_Animation(Vignette,TweenInfo.new(1,Enum.EasingStyle.Quint,Enum.EasingDirection.InOut),{
+					ImageTransparency = 1
+				});
+
+				task.wait(0.2)
+
+				task.delay(3,function()
+					CompKiller:Destroy();
+				end)
+			end)
+
+			task.delay(0.6,function()
 				Event:Fire();
-			end);
-		end);
+			end)
+		end)
 	end);
 
 	return {
