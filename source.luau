@@ -9056,4 +9056,245 @@ function Compkiller.newNotify()
 	return Compkiller.NOTIFY_CACHE;
 end;
 
+-- Crosshair Indicator System (Ported from Hysteria)
+local CrosshairIndicator = {
+	Enabled = false,
+	Position = Vector2.new(0, 0),
+	Items = {},
+	Colors = {
+		Primary = Color3.fromRGB(116, 166, 169),
+		Text = Color3.fromRGB(230, 230, 230),
+		Background = Color3.fromRGB(23, 26, 28),
+		Accent = Color3.fromRGB(116, 166, 169)
+	}
+}
+
+-- CrosshairGUI Creation
+local function CreateCrosshairGUI()
+	local ScreenGui = Instance.new("ScreenGui")
+	ScreenGui.Name = "CrosshairIndicator"
+	ScreenGui.Parent = game.CoreGui
+	ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+	
+	local MainFrame = Instance.new("Frame")
+	MainFrame.Name = "MainFrame"
+	MainFrame.Parent = ScreenGui
+	MainFrame.Size = UDim2.new(0, 200, 0, 100)
+	MainFrame.Position = UDim2.new(0.5, -100, 0.5, 50)
+	MainFrame.BackgroundTransparency = 1
+	MainFrame.BorderSizePixel = 0
+	
+	return ScreenGui, MainFrame
+end
+
+-- Crosshair Indicator Logic
+function CrosshairIndicator:Initialize()
+	if self.Enabled then
+		return
+	end
+	
+	self.ScreenGui, self.MainFrame = CreateCrosshairGUI()
+	self.Enabled = true
+	
+	-- Logo/Brand Text
+	local BrandLabel = Instance.new("TextLabel")
+	BrandLabel.Name = "Brand"
+	BrandLabel.Parent = self.MainFrame
+	BrandLabel.Size = UDim2.new(0, 150, 0, 20)
+	BrandLabel.Position = UDim2.new(0, 0, 0, 0)
+	BrandLabel.BackgroundTransparency = 1
+	BrandLabel.Text = "SYDE"
+	BrandLabel.TextColor3 = self.Colors.Primary
+	BrandLabel.TextScaled = true
+	BrandLabel.Font = Enum.Font.GothamBold
+	BrandLabel.TextXAlignment = Enum.TextXAlignment.Center
+	
+	-- Status Indicators Container
+	local StatusContainer = Instance.new("Frame")
+	StatusContainer.Name = "StatusContainer"
+	StatusContainer.Parent = self.MainFrame
+	StatusContainer.Size = UDim2.new(0, 200, 0, 80)
+	StatusContainer.Position = UDim2.new(0, 0, 0, 25)
+	StatusContainer.BackgroundTransparency = 1
+	
+	self.BrandLabel = BrandLabel
+	self.StatusContainer = StatusContainer
+	self.StatusItems = {}
+	
+	-- Create status items
+	self:CreateStatusItems()
+	
+	-- Update loop
+	game:GetService("RunService").Heartbeat:Connect(function()
+		if self.Enabled then
+			self:Update()
+		end
+	end)
+end
+
+function CrosshairIndicator:CreateStatusItems()
+	local yOffset = 0
+	local itemHeight = 18
+	
+	-- DT (Double Tap) Indicator
+	local DTLabel = Instance.new("TextLabel")
+	DTLabel.Name = "DT"
+	DTLabel.Parent = self.StatusContainer
+	DTLabel.Size = UDim2.new(0, 50, 0, itemHeight)
+	DTLabel.Position = UDim2.new(0, 0, 0, yOffset)
+	DTLabel.BackgroundTransparency = 1
+	DTLabel.Text = "DT"
+	DTLabel.TextColor3 = self.Colors.Text
+	DTLabel.TextScaled = true
+	DTLabel.Font = Enum.Font.Gotham
+	DTLabel.TextXAlignment = Enum.TextXAlignment.Left
+	DTLabel.Visible = false
+	
+	-- DMG (Damage Override) Indicator  
+	yOffset = yOffset + itemHeight
+	local DMGLabel = Instance.new("TextLabel")
+	DMGLabel.Name = "DMG"
+	DMGLabel.Parent = self.StatusContainer
+	DMGLabel.Size = UDim2.new(0, 50, 0, itemHeight)
+	DMGLabel.Position = UDim2.new(0, 0, 0, yOffset)
+	DMGLabel.BackgroundTransparency = 1
+	DMGLabel.Text = "DMG"
+	DMGLabel.TextColor3 = self.Colors.Text
+	DMGLabel.TextScaled = true
+	DMGLabel.Font = Enum.Font.Gotham
+	DMGLabel.TextXAlignment = Enum.TextXAlignment.Left
+	DMGLabel.Visible = false
+	
+	-- PA (Peek Assist) Indicator
+	yOffset = yOffset + itemHeight
+	local PALabel = Instance.new("TextLabel")
+	PALabel.Name = "PA"
+	PALabel.Parent = self.StatusContainer
+	PALabel.Size = UDim2.new(0, 50, 0, itemHeight)
+	PALabel.Position = UDim2.new(0, 0, 0, yOffset)
+	PALabel.BackgroundTransparency = 1
+	PALabel.Text = "PA"
+	PALabel.TextColor3 = self.Colors.Text
+	PALabel.TextScaled = true
+	PALabel.Font = Enum.Font.Gotham
+	PALabel.TextXAlignment = Enum.TextXAlignment.Left
+	PALabel.Visible = false
+	
+	-- Store references
+	self.StatusItems = {
+		DT = DTLabel,
+		DMG = DMGLabel,
+		PA = PALabel
+	}
+end
+
+function CrosshairIndicator:Update()
+	if not self.Enabled or not self.StatusItems then
+		return
+	end
+	
+	-- Example logic - replace with actual game state detection
+	local player = game.Players.LocalPlayer
+	if not player or not player.Character then
+		return
+	end
+	
+	-- DT Status (example logic)
+	local dtActive = false -- Replace with actual DT detection
+	self.StatusItems.DT.Visible = dtActive
+	if dtActive then
+		self.StatusItems.DT.TextColor3 = self.Colors.Primary
+	else
+		self.StatusItems.DT.TextColor3 = Color3.fromRGB(100, 100, 100)
+	end
+	
+	-- DMG Override Status
+	local dmgActive = false -- Replace with actual damage override detection
+	self.StatusItems.DMG.Visible = dmgActive
+	
+	-- Peek Assist Status  
+	local paActive = false -- Replace with actual peek assist detection
+	self.StatusItems.PA.Visible = paActive
+	
+	-- Update position based on screen center
+	local camera = workspace.CurrentCamera
+	if camera then
+		local screenSize = camera.ViewportSize
+		self.MainFrame.Position = UDim2.new(0.5, -100, 0.5, 50)
+	end
+end
+
+function CrosshairIndicator:Toggle(state)
+	if state == nil then
+		self.Enabled = not self.Enabled
+	else
+		self.Enabled = state
+	end
+	
+	if self.Enabled then
+		if not self.ScreenGui then
+			self:Initialize()
+		else
+			self.ScreenGui.Enabled = true
+		end
+	else
+		if self.ScreenGui then
+			self.ScreenGui.Enabled = false
+		end
+	end
+end
+
+function CrosshairIndicator:SetColors(colors)
+	if colors.Primary then
+		self.Colors.Primary = colors.Primary
+		if self.BrandLabel then
+			self.BrandLabel.TextColor3 = colors.Primary
+		end
+	end
+	
+	if colors.Text then
+		self.Colors.Text = colors.Text
+	end
+	
+	if colors.Accent then
+		self.Colors.Accent = colors.Accent
+	end
+end
+
+function CrosshairIndicator:Destroy()
+	self.Enabled = false
+	if self.ScreenGui then
+		self.ScreenGui:Destroy()
+		self.ScreenGui = nil
+	end
+end
+
+-- Add CrosshairIndicator to Compkiller
+Compkiller.CrosshairIndicator = CrosshairIndicator
+
+-- Crosshair Indicator Toggle Function (Risky Feature)
+function Compkiller:AddCrosshairToggle(parent)
+	if parent and parent.AddToggle then
+		local crosshairToggle = parent:AddToggle({
+			Name = "Crosshair Indicator",
+			Default = false,
+			Flag = "CrosshairIndicator",
+			Risky = true, -- This makes it show up with risky state coloring
+			Callback = function(enabled)
+				CrosshairIndicator:Toggle(enabled)
+			end
+		})
+		
+		return crosshairToggle
+	end
+	return nil
+end
+
+-- Auto-initialize when Compkiller loads
+spawn(function()
+	wait(1) -- Small delay to ensure everything is loaded
+	-- CrosshairIndicator is now available as a risky feature toggle
+	-- Use Compkiller:AddCrosshairToggle(yourTabOrSection) to add it to your UI
+end)
+
 return Compkiller;
